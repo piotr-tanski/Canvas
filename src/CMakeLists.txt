@@ -14,3 +14,6 @@ add_library(
 
 target_include_directories(canvas PUBLIC ../include)
 target_compile_features(canvas PUBLIC cxx_std_11)
+target_compile_options(canvas PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>)
