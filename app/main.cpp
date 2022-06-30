@@ -17,20 +17,18 @@ void displayCanvas(const canvas::Canvas::DrawingArea& canvas, std::string &&titl
     std::cout << '\n';
 }
 
-int main(int, char**) {
+void testRectangles() {
     auto controller = canvas::CanvasControllerFactory::create(resolution);
 
     using canvas::shapes::Rectangle;
-    Rectangle::Params params{{2, 3}, 6, 5, canvas::colors::Black};
-    auto obj = new Rectangle{params};
+    Rectangle::Params params{{1, 1}, 6, 8, canvas::colors::Black};
+    auto obj = new Rectangle(params);
 
-    // Display rectangle
     canvas::Batch displayCmd;
     displayCmd.add(obj);
     controller->execute(std::move(displayCmd));
-    displayCanvas(controller->getCanvasData(), "Display 6x5 rectangle");
+    displayCanvas(controller->getCanvasData(), "Display a rectangle");
 
-    // Add overlapping rectangle
     auto overlappingParams = params;
     overlappingParams.start = canvas::Point{0, 0};
     auto overlapping = new Rectangle{overlappingParams};
@@ -46,9 +44,9 @@ int main(int, char**) {
     controller->execute(std::move(selectCmd));
 
     params.width = 4;
-    params.height = 8;
+    params.height = 2;
     obj->setAttributes(params);
-    displayCanvas(controller->getCanvasData(), "Changed selected rectangle to 4x8");
+    displayCanvas(controller->getCanvasData(), "Changed selected rectangle to 4x2");
 
     // Unselect
     canvas::Batch unselectCmd;
@@ -81,6 +79,49 @@ int main(int, char**) {
     removeCmd.remove(obj);
     controller->execute(std::move(removeCmd));
     displayCanvas(controller->getCanvasData(), "Removed rectangle");
+}
 
+void testTriangles() {
+    auto controller = canvas::CanvasControllerFactory::create(resolution);
+
+    using canvas::shapes::Triangle;
+    Triangle::Params params{{1, 1}, {5, 1}, {1, 5}, canvas::colors::Black};
+    auto obj = new Triangle(params);
+
+    canvas::Batch displayCmd;
+    displayCmd
+            .add(obj)
+            .select(obj);
+    controller->execute(std::move(displayCmd));
+    displayCanvas(controller->getCanvasData(), "Display a triangle");
+
+    params.v2 = canvas::Point{8, 1};
+    obj->setAttributes(params);
+    displayCanvas(controller->getCanvasData(), "Display bigger triangle");
+}
+
+void testCircles() {
+    auto controller = canvas::CanvasControllerFactory::create(resolution);
+
+    using canvas::shapes::Circle;
+    Circle::Params params{{7, 7}, 6, canvas::colors::Black};
+    auto obj = new Circle(params);
+
+    canvas::Batch displayCmd;
+    displayCmd
+            .add(obj)
+            .select(obj);
+    controller->execute(std::move(displayCmd));
+    displayCanvas(controller->getCanvasData(), "Display a circle");
+
+    params.radius = 3;
+    obj->setAttributes(params);
+    displayCanvas(controller->getCanvasData(), "Display smaller circle");
+}
+
+int main(int, char**) {
+    testRectangles();
+    testTriangles();
+    testCircles();
     return 0;
 }

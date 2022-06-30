@@ -120,6 +120,8 @@ public:
 private:
     MutableAttributes<Params> attributes;
     void changeImpl() override;
+
+    void drawLine(Point a, Point b, painting::Tool *tool);
 };
 
 } // namespace canvas::shapes

@@ -7,6 +7,11 @@ namespace canvas {
 namespace {
     constexpr Color DefaultColor = colors::White;
 
+    class OutOfCanvasError : public std::runtime_error {
+    public:
+        using std::runtime_error::runtime_error;
+    };
+
     class ObjectsOverlappingError : public std::runtime_error {
     public:
         using std::runtime_error::runtime_error;
@@ -56,22 +61,39 @@ bool CanvasImpl::isAreaPreparedFor(shapes::Shape *shape) {
     return true;
 }
 
+unsigned int CanvasImpl::pointToPosition(Point point) const noexcept {
+    return point.x + resolution.width * point.y;
+}
+
+void CanvasImpl::checkIfInBounds(unsigned int position) const {
+    if (position >= area.size()) {
+        throw OutOfCanvasError{"Drawing outside of canvas"};
+    }
+}
+
 Brush::Brush(CanvasImpl &canvas) : canvas{canvas} {}
 
 void Brush::apply(Point point, Color color) {
-    canvas.area[point.x + canvas.resolution.width * point.y] = color;
+    const auto pos = canvas.pointToPosition(point);
+    canvas.checkIfInBounds(pos);
+    canvas.area[pos] = color;
 }
 
 Eraser::Eraser(CanvasImpl &canvas) : canvas{canvas} {}
 
 void Eraser::apply(Point point, [[maybe_unused]] Color color) {
-    canvas.area[point.x + canvas.resolution.width * point.y] = DefaultColor;
+    const auto pos = canvas.pointToPosition(point);
+    canvas.checkIfInBounds(pos);
+    canvas.area[pos] = DefaultColor;
 }
 
 Sketcher::Sketcher(CanvasImpl &canvas) : canvas{canvas} {}
 
 void Sketcher::apply(Point point, [[maybe_unused]] Color color) {
-    auto content = canvas.area[point.x + canvas.resolution.width * point.y];
+    const auto pos = canvas.pointToPosition(point);
+    canvas.checkIfInBounds(pos);
+
+    const auto content = canvas.area[pos];
     if (content != DefaultColor) {
         throw ObjectsOverlappingError{"Objects are overlapping"};
     }
