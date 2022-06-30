@@ -69,7 +69,7 @@ private:
 class Rectangle : public MutableShape {
 public:
     struct Params {
-        Point start{0U, 0U};
+        Point start{};
         Length width{0};
         Length height{0};
         Color color{colors::White};
@@ -88,7 +88,7 @@ private:
 class Circle : public MutableShape {
 public:
     struct Params {
-        Point center;
+        Point center{};
         Length radius{0};
         Color color{colors::White};
     };
@@ -106,9 +106,9 @@ private:
 class Triangle : public MutableShape {
 public:
     struct Params {
-        Point v1;
-        Point v2;
-        Point v3;
+        Point v1{};
+        Point v2{};
+        Point v3{};
         Color color{colors::White};
     };
 

@@ -13,13 +13,13 @@ namespace canvas {
     using Length = unsigned int;
 
     struct Point {
-        unsigned int x;
-        unsigned int y;
+        unsigned int x{0U};
+        unsigned int y{0U};
     };
 
     struct CanvasResolution {
-        std::uint16_t height;
-        std::uint16_t width;
+        std::uint16_t height{0U};
+        std::uint16_t width{0U};
     };
 
 } // namespace canvas
