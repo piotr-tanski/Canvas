@@ -42,7 +42,7 @@ void Circle::changeImpl()  {
 
 void Circle::draw(painting::Tool *tool) {
     const auto start = toRadians(0);
-    const auto end   = toRadians(360);
+    const auto end = toRadians(360);
     const auto radius = attributes.get().radius;
     double step = 0.001;
 
@@ -74,12 +74,12 @@ void Triangle::draw(painting::Tool *tool) {
 void Triangle::drawLine(Point a, Point b, painting::Tool *tool) {
     const auto distanceX = b.x > a.x ? b.x - a.x : a.x - b.x;
     const auto distanceY =  b.y > a.y ? b.y - a.y : a.y - b.y;
-    const auto step     = distanceX >= distanceY ? distanceX : distanceY;
+    const auto step = distanceX >= distanceY ? distanceX : distanceY;
 
     auto dx = static_cast<float>(distanceX) / step;
-    dx      = b.x < a.x ? -dx : dx;
+    dx = b.x < a.x ? -dx : dx;
     auto dy = static_cast<float>(distanceY) / step;
-    dy      = b.y < a.y ? -dy : dy;
+    dy = b.y < a.y ? -dy : dy;
 
     auto x = static_cast<float>(a.x);
     auto y = static_cast<float>(a.y);
