@@ -58,14 +58,18 @@ void CanvasController::execute(Batch &&batch) {
             }
             case DrawCommand::Type::Select: {
                 auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
-                target->bindOnChange([this](shapes::MutableShape *shape) {
-                    change(shape);
-                });
+                if (target) {
+                    target->bindOnChange([this](shapes::MutableShape *shape) {
+                        change(shape);
+                    });
+                }
                 break;
             }
             case DrawCommand::Type::Unselect: {
                 auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
-                target->bindOnChange(nullptr);
+                if (target) {
+                    target->bindOnChange(nullptr);
+                }
                 break;
             }
             default:
