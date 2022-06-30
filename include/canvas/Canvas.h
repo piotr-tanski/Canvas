@@ -2,6 +2,7 @@
 
 #include "Common.h"
 
+#include <stdexcept>
 #include <vector>
 
 namespace canvas {
@@ -34,5 +35,15 @@ namespace painting {
         virtual void apply(Point point, Color color) = 0;
     };
 } // namespace painting
+
+class OutOfCanvasError : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
+
+class ObjectsOverlappingError : public std::runtime_error {
+public:
+    using std::runtime_error::runtime_error;
+};
 
 } // namespace canvas

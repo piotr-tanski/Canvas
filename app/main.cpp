@@ -35,8 +35,13 @@ void testRectangles() {
 
     canvas::Batch overlappingObjCmd;
     overlappingObjCmd.add(overlapping);
-    controller->execute(std::move(overlappingObjCmd));
-    displayCanvas(controller->getCanvasData(), "Display canvas (overlapping object not added)");
+    try {
+        controller->execute(std::move(overlappingObjCmd));
+    }
+    catch (const canvas::ObjectsOverlappingError &error) {
+        std::cout << "Error occurred: " << error.what() << '\n';
+        delete overlapping;
+    }
 
     // Modify selected rectangle
     canvas::Batch selectCmd;

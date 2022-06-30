@@ -3,32 +3,8 @@
 #include "Canvas.h"
 
 #include <functional>
-#include <optional>
 
 namespace canvas::shapes {
-
-template <typename T>
-class MutableAttributes {
-public:
-    explicit MutableAttributes(const T& state) : current{state} {}
-
-    [[nodiscard]] const T& get() const noexcept { return current; }
-
-    void reset(const T& other) noexcept {
-        pending = other;
-    }
-
-    void change() noexcept {
-        if (pending.has_value()) {
-            current = pending.value();
-            pending = std::nullopt;
-        }
-    }
-
-private:
-    T current{};
-    std::optional<T> pending = std::nullopt;
-};
 
 class Shape {
 public:
@@ -53,8 +29,8 @@ protected:
     OnChangeListener onChange;
 
     template <typename T>
-    static void changeAttributes(MutableAttributes<typename T::Params>& dest, const typename T::Params &src, const OnChangeListener &listener, MutableShape *target) {
-        dest.reset(src);
+    static void changeAttributes(MutableState<typename T::Params>& dest, const typename T::Params &src, const OnChangeListener &listener, MutableShape *target) {
+        dest.setPendingState(src);
         if (listener) {
             listener(target);
         }
@@ -81,7 +57,7 @@ public:
 private:
     void changeImpl() override;
 
-    MutableAttributes<Params> attributes;
+    MutableState<Params> attributes;
 };
 
 class Circle : public MutableShape {
@@ -100,7 +76,7 @@ public:
 private:
     void changeImpl() override;
 
-    MutableAttributes<Params> attributes;
+    MutableState<Params> attributes;
 };
 
 class Triangle : public MutableShape {
@@ -121,7 +97,7 @@ private:
     void changeImpl() override;
     void drawLine(Point a, Point b, painting::Tool *tool);
 
-    MutableAttributes<Params> attributes;
+    MutableState<Params> attributes;
 };
 
 } // namespace canvas::shapes

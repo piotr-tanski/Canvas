@@ -17,7 +17,7 @@ void Rectangle::setAttributes(Params params) noexcept {
 }
 
 void Rectangle::changeImpl()  {
-    attributes.change();
+    attributes.performTransition();
 }
 
 void Rectangle::draw(painting::Tool *tool) {
@@ -37,7 +37,7 @@ void Circle::setAttributes(Params params) noexcept {
 }
 
 void Circle::changeImpl()  {
-    attributes.change();
+    attributes.performTransition();
 }
 
 void Circle::draw(painting::Tool *tool) {
@@ -61,7 +61,7 @@ void Triangle::setAttributes(Params params) noexcept {
 }
 
 void Triangle::changeImpl()  {
-    attributes.change();
+    attributes.performTransition();
 }
 
 

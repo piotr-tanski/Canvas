@@ -1,22 +1,11 @@
 #include "CanvasImpl.h"
 
-#include <stdexcept>
 #include <memory>
 
 namespace canvas {
 
 namespace {
     constexpr Color DefaultColor = colors::White;
-
-    class OutOfCanvasError : public std::runtime_error {
-    public:
-        using std::runtime_error::runtime_error;
-    };
-
-    class ObjectsOverlappingError : public std::runtime_error {
-    public:
-        using std::runtime_error::runtime_error;
-    };
 } // namespace
 
 Canvas::Canvas(CanvasResolution resolution) : area(resolution.height * resolution.width, DefaultColor) {}
@@ -35,10 +24,10 @@ void CanvasImpl::draw(shapes::Shape *shape) {
 }
 
 void CanvasImpl::drawImpl(shapes::Shape *shape) {
-    if (isAreaPreparedFor(shape)) {
-        auto brush = std::make_unique<Brush>(*this);
-        shape->draw(brush.get());
-    }
+    checkIfAreaIsEmpty(shape);
+
+    auto brush = std::make_unique<Brush>(*this);
+    shape->draw(brush.get());
 }
 
 void CanvasImpl::erase(shapes::Shape *shape) {
@@ -51,15 +40,9 @@ void CanvasImpl::eraseImpl(shapes::Shape *shape) {
     shape->draw(rubber.get());
 }
 
-bool CanvasImpl::isAreaPreparedFor(shapes::Shape *shape) {
+void CanvasImpl::checkIfAreaIsEmpty(shapes::Shape *shape) {
     auto sketcher = std::make_unique<Sketcher>(*this);
-    try {
-        shape->draw(sketcher.get());
-    }
-    catch (const ObjectsOverlappingError &) {
-        return false;
-    }
-    return true;
+    shape->draw(sketcher.get());
 }
 
 unsigned int CanvasImpl::pointToPosition(Point point) const noexcept {
@@ -96,7 +79,7 @@ void Sketcher::apply(Point point, [[maybe_unused]] Color color) {
 
     const auto content = canvas.area[pos];
     if (content != DefaultColor) {
-        throw ObjectsOverlappingError{"Objects are overlapping"};
+        throw ObjectsOverlappingError{"Unable to draw object: objects are overlapping"};
     }
 }
 

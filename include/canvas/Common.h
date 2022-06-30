@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <optional>
 
 namespace canvas {
 
@@ -20,6 +21,29 @@ namespace canvas {
     struct CanvasResolution {
         std::uint16_t height{0U};
         std::uint16_t width{0U};
+    };
+
+    template <typename T>
+    class MutableState {
+    public:
+        explicit MutableState(const T& state) : current{state} {}
+
+        [[nodiscard]] const T& get() const noexcept { return current; }
+
+        void setPendingState(const T& other) noexcept {
+            pending = other;
+        }
+
+        void performTransition() noexcept {
+            if (pending.has_value()) {
+                current = pending.value();
+                pending = std::nullopt;
+            }
+        }
+
+    private:
+        T current{};
+        std::optional<T> pending = std::nullopt;
     };
 
 } // namespace canvas

@@ -19,8 +19,8 @@ public:
 private:
     void drawImpl(shapes::Shape *shape);
     void eraseImpl(shapes::Shape *shape);
-    [[nodiscard]] bool isAreaPreparedFor(shapes::Shape *shape);
     [[nodiscard]] unsigned int pointToPosition(Point point) const noexcept;
+    void checkIfAreaIsEmpty(shapes::Shape *shape);
     void checkIfInBounds(unsigned int position) const;
 
     CanvasResolution resolution;
