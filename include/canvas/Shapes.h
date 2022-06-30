@@ -8,9 +8,11 @@
 namespace canvas::shapes {
 
 template <typename T>
-struct MutableAttributes {
+class MutableAttributes {
 public:
     explicit MutableAttributes(const T& state) : current{state} {}
+
+    [[nodiscard]] const T& get() const noexcept { return current; }
 
     void reset(const T& other) noexcept {
         pending = other;
@@ -21,10 +23,6 @@ public:
             current = pending.value();
             pending = std::nullopt;
         }
-    }
-
-    [[nodiscard]] const T& get() const noexcept {
-        return current;
     }
 
 private:
@@ -43,7 +41,7 @@ class MutableShape : public Shape {
 public:
     using OnChangeListener = std::function<void(MutableShape*)>;
 
-    void bindOnChange(OnChangeListener &&listener) {
+    void bindOnChange(OnChangeListener &&listener) noexcept {
         onChange = std::move(listener);
     }
 
@@ -81,8 +79,9 @@ public:
     void draw(painting::Tool *tool) override;
 
 private:
-    MutableAttributes<Params> attributes;
     void changeImpl() override;
+
+    MutableAttributes<Params> attributes;
 };
 
 class Circle : public MutableShape {
@@ -99,8 +98,9 @@ public:
     void draw(painting::Tool *tool) override;
 
 private:
-    MutableAttributes<Params> attributes;
     void changeImpl() override;
+
+    MutableAttributes<Params> attributes;
 };
 
 class Triangle : public MutableShape {
@@ -118,10 +118,10 @@ public:
     void draw(painting::Tool *tool) override;
 
 private:
-    MutableAttributes<Params> attributes;
     void changeImpl() override;
-
     void drawLine(Point a, Point b, painting::Tool *tool);
+
+    MutableAttributes<Params> attributes;
 };
 
 } // namespace canvas::shapes
