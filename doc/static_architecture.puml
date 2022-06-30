@@ -1,0 +1,39 @@
+@startuml
+
+package libcanvas {
+class CanvasImpl
+class PaintingTool
+class Rectangle
+class Circle
+class Triangle
+
+interface Shape {
+    Responsible for drawing objects on a canvas
+}
+
+interface Canvas {
+    Responsible for managing the canvas state, i.e.
+    the state of 2D array, and the list of drawn objects.
+}
+
+class Controller {
+    Responsible for handling user events
+}
+
+CanvasImpl -up-|> Canvas
+Rectangle -up-|> Shape
+Circle -up-|> Shape
+Triangle -up-|> Shape
+
+CanvasImpl -down-> PaintingTool : creates
+PaintingTool -up- Rectangle
+PaintingTool -up- Circle
+PaintingTool -up- Triangle
+}
+
+package GUI {
+}
+
+GUI -- Controller
+
+@enduml

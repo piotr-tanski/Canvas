@@ -1,0 +1,23 @@
+@startuml
+
+actor User as user
+
+package CanvasLibrary as lib {
+    usecase "Add" as UC1
+    usecase "Remove" as UC2
+    usecase "Update" as UC3
+    usecase "Select" as UC4
+    usecase "Unselect" as UC5
+    usecase "Batch actions" as UC6
+}
+
+user --> UC1
+user --> UC2
+user --> UC3
+user --> UC4
+user --> UC5
+user --> UC6
+
+note bottom of UC4 : Changing attribute(s) on the\nselected shape should have an\nimmediate effect on the canvas
+
+@enduml
