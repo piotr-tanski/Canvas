@@ -7,11 +7,6 @@
 
 namespace canvas {
 
-class ObjectsOverlappingError : public std::runtime_error {
-public:
-    using std::runtime_error::runtime_error;
-};
-
 class CanvasImpl : public Canvas {
     using Objects = std::list<shapes::Shape*>;
 public:

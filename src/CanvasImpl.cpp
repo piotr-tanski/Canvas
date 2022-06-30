@@ -1,9 +1,16 @@
 #include "CanvasImpl.h"
 
+#include <stdexcept>
+
 namespace canvas {
 
 namespace {
     constexpr Color DefaultColor = colors::White;
+
+    class ObjectsOverlappingError : public std::runtime_error {
+    public:
+        using std::runtime_error::runtime_error;
+    };
 } // namespace
 
 Canvas::Canvas(CanvasResolution resolution) : area(resolution.height * resolution.width, DefaultColor) {}
@@ -63,7 +70,7 @@ void Eraser::apply(Point point, [[maybe_unused]] Color color) {
 
 Sketcher::Sketcher(CanvasImpl &canvas) : canvas{canvas} {}
 
-void Sketcher::apply(Point point, Color color) {
+void Sketcher::apply(Point point, [[maybe_unused]] Color color) {
     auto content = canvas.area[point.x + canvas.resolution.width * point.y];
     if (content != DefaultColor) {
         throw ObjectsOverlappingError{"Objects are overlapping"};
