@@ -4,6 +4,7 @@
 #include "Shapes.h"
 
 #include <list>
+#include <memory>
 
 namespace canvas {
 

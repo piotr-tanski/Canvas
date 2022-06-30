@@ -2,7 +2,6 @@
 
 #include "Common.h"
 
-#include <memory>
 #include <vector>
 
 namespace canvas {

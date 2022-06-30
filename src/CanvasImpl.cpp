@@ -1,6 +1,7 @@
 #include "CanvasImpl.h"
 
 #include <stdexcept>
+#include <memory>
 
 namespace canvas {
 
