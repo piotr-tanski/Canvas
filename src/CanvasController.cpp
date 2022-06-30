@@ -1,14 +1,14 @@
-#include <canvas/CanvasController.h>
 #include "CanvasImpl.h"
+#include <canvas/CanvasController.h>
 
 namespace canvas {
 
-Batch& Batch::add(shapes::Shape *shape) {
+Batch &Batch::add(shapes::Shape *shape) {
     commands.push_back(DrawCommand{DrawCommand::Type::Add, shape});
     return *this;
 }
 
-Batch& Batch::remove(shapes::Shape *shape) {
+Batch &Batch::remove(shapes::Shape *shape) {
     commands.push_back(DrawCommand{DrawCommand::Type::Remove, shape});
     return *this;
 }
@@ -28,9 +28,7 @@ Batch &Batch::unselect(shapes::MutableShape *shape) {
     return *this;
 }
 
-const Batch::CommandList &Batch::getCommands() const noexcept {
-    return commands;
-}
+const Batch::CommandList &Batch::getCommands() const noexcept { return commands; }
 
 std::unique_ptr<CanvasController> CanvasControllerFactory::create(CanvasResolution resolution) {
     return std::make_unique<CanvasController>(createDefaultCanvas(resolution));
@@ -45,35 +43,33 @@ CanvasController::CanvasController(std::unique_ptr<Canvas> &&canvas) : canvas{st
 void CanvasController::execute(Batch &&batch) {
     for (const auto &cmd : batch.getCommands()) {
         switch (cmd.type) {
-            case DrawCommand::Type::Add:
-                add(cmd.target);
-                break;
-            case DrawCommand::Type::Remove:
-                remove(cmd.target);
-                break;
-            case DrawCommand::Type::Change: {
-                auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
-                change(target);
-                break;
+        case DrawCommand::Type::Add:
+            add(cmd.target);
+            break;
+        case DrawCommand::Type::Remove:
+            remove(cmd.target);
+            break;
+        case DrawCommand::Type::Change: {
+            auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
+            change(target);
+            break;
+        }
+        case DrawCommand::Type::Select: {
+            auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
+            if (target) {
+                target->bindOnChange([this](shapes::MutableShape *shape) { change(shape); });
             }
-            case DrawCommand::Type::Select: {
-                auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
-                if (target) {
-                    target->bindOnChange([this](shapes::MutableShape *shape) {
-                        change(shape);
-                    });
-                }
-                break;
+            break;
+        }
+        case DrawCommand::Type::Unselect: {
+            auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
+            if (target) {
+                target->bindOnChange(nullptr);
             }
-            case DrawCommand::Type::Unselect: {
-                auto target = dynamic_cast<shapes::MutableShape *>(cmd.target);
-                if (target) {
-                    target->bindOnChange(nullptr);
-                }
-                break;
-            }
-            default:
-                break;
+            break;
+        }
+        default:
+            break;
         }
     }
 }
@@ -100,8 +96,6 @@ void CanvasController::change(shapes::MutableShape *shape) {
     add(shape);
 }
 
-Canvas::DrawingArea CanvasController::getCanvasData() const noexcept {
-    return canvas->getData();
-}
+Canvas::DrawingArea CanvasController::getCanvasData() const noexcept { return canvas->getData(); }
 
 } // namespace canvas

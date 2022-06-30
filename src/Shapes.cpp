@@ -5,9 +5,9 @@
 namespace canvas::shapes {
 
 namespace {
-    using Radians = double;
-    using Degrees = unsigned int;
-    constexpr Radians toRadians(Degrees degrees) { return degrees * M_PI / 180; }
+using Radians = double;
+using Degrees = unsigned int;
+constexpr Radians toRadians(Degrees degrees) { return degrees * M_PI / 180; }
 } // namespace
 
 Rectangle::Rectangle(Rectangle::Params params) : attributes{params} {}
@@ -16,9 +16,7 @@ void Rectangle::setAttributes(Params params) noexcept {
     changeAttributes<Rectangle>(attributes, params, onChange, this);
 }
 
-void Rectangle::changeImpl()  {
-    attributes.performTransition();
-}
+void Rectangle::changeImpl() { attributes.performTransition(); }
 
 void Rectangle::draw(painting::Tool *tool) {
     const auto startX = attributes.get().start.x;
@@ -32,13 +30,9 @@ void Rectangle::draw(painting::Tool *tool) {
 
 Circle::Circle(Params params) : attributes{params} {}
 
-void Circle::setAttributes(Params params) noexcept {
-    changeAttributes<Circle>(attributes, params, onChange, this);
-}
+void Circle::setAttributes(Params params) noexcept { changeAttributes<Circle>(attributes, params, onChange, this); }
 
-void Circle::changeImpl()  {
-    attributes.performTransition();
-}
+void Circle::changeImpl() { attributes.performTransition(); }
 
 void Circle::draw(painting::Tool *tool) {
     const auto start = toRadians(0);
@@ -56,14 +50,9 @@ void Circle::draw(painting::Tool *tool) {
 
 Triangle::Triangle(Params params) : attributes{params} {}
 
-void Triangle::setAttributes(Params params) noexcept {
-    changeAttributes<Triangle>(attributes, params, onChange, this);
-}
+void Triangle::setAttributes(Params params) noexcept { changeAttributes<Triangle>(attributes, params, onChange, this); }
 
-void Triangle::changeImpl()  {
-    attributes.performTransition();
-}
-
+void Triangle::changeImpl() { attributes.performTransition(); }
 
 void Triangle::draw(painting::Tool *tool) {
     drawLine(attributes.get().v1, attributes.get().v2, tool);
@@ -73,7 +62,7 @@ void Triangle::draw(painting::Tool *tool) {
 
 void Triangle::drawLine(Point a, Point b, painting::Tool *tool) {
     const auto distanceX = b.x > a.x ? b.x - a.x : a.x - b.x;
-    const auto distanceY =  b.y > a.y ? b.y - a.y : a.y - b.y;
+    const auto distanceY = b.y > a.y ? b.y - a.y : a.y - b.y;
     const auto step = distanceX >= distanceY ? distanceX : distanceY;
 
     auto dx = static_cast<float>(distanceX) / step;

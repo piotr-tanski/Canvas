@@ -9,44 +9,37 @@
 namespace canvas {
 
 struct DrawCommand {
-    enum class Type {
-        None,
-        Add,
-        Remove,
-        Change,
-        Select,
-        Unselect
-    };
+    enum class Type { None, Add, Remove, Change, Select, Unselect };
 
     Type type = Type::None;
     shapes::Shape *target = nullptr;
 };
 
 class Batch {
-public:
+  public:
     using CommandList = std::list<DrawCommand>;
 
-    Batch& add(shapes::Shape *shape);
-    Batch& remove(shapes::Shape *shape);
-    Batch& change(shapes::MutableShape *shape);
-    Batch& select(shapes::MutableShape *shape);
-    Batch& unselect(shapes::MutableShape *shape);
+    Batch &add(shapes::Shape *shape);
+    Batch &remove(shapes::Shape *shape);
+    Batch &change(shapes::MutableShape *shape);
+    Batch &select(shapes::MutableShape *shape);
+    Batch &unselect(shapes::MutableShape *shape);
 
-    [[nodiscard]] const CommandList& getCommands() const noexcept;
+    [[nodiscard]] const CommandList &getCommands() const noexcept;
 
-private:
+  private:
     CommandList commands;
 };
 
 class CanvasController {
-public:
+  public:
     explicit CanvasController(std::unique_ptr<Canvas> &&canvas);
 
     void execute(Batch &&batch);
 
     [[nodiscard]] Canvas::DrawingArea getCanvasData() const noexcept;
 
-private:
+  private:
     void add(shapes::Shape *shape);
     void remove(shapes::Shape *shape);
     void change(shapes::MutableShape *shape);
@@ -55,10 +48,10 @@ private:
 };
 
 class CanvasControllerFactory {
-public:
+  public:
     static std::unique_ptr<CanvasController> create(CanvasResolution resolution);
 
-private:
+  private:
     static std::unique_ptr<Canvas> createDefaultCanvas(CanvasResolution resolution);
 };
 

@@ -5,7 +5,7 @@
 namespace canvas {
 
 namespace {
-    constexpr Color DefaultColor = colors::White;
+constexpr Color DefaultColor = colors::White;
 } // namespace
 
 Canvas::Canvas(CanvasResolution resolution) : area(resolution.height * resolution.width, DefaultColor) {}
@@ -45,9 +45,7 @@ void CanvasImpl::checkIfAreaIsEmpty(shapes::Shape *shape) {
     shape->draw(sketcher.get());
 }
 
-unsigned int CanvasImpl::pointToPosition(Point point) const noexcept {
-    return point.x + resolution.width * point.y;
-}
+unsigned int CanvasImpl::pointToPosition(Point point) const noexcept { return point.x + resolution.width * point.y; }
 
 void CanvasImpl::checkIfInBounds(unsigned int position) const {
     if (position >= area.size()) {

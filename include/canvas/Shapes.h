@@ -7,41 +7,38 @@
 namespace canvas::shapes {
 
 class Shape {
-public:
+  public:
     virtual ~Shape() noexcept = default;
 
     virtual void draw(painting::Tool *tool) = 0;
 };
 
 class MutableShape : public Shape {
-public:
-    using OnChangeListener = std::function<void(MutableShape*)>;
+  public:
+    using OnChangeListener = std::function<void(MutableShape *)>;
 
-    void bindOnChange(OnChangeListener &&listener) noexcept {
-        onChange = std::move(listener);
-    }
+    void bindOnChange(OnChangeListener &&listener) noexcept { onChange = std::move(listener); }
 
-    void change() {
-        changeImpl();
-    }
+    void change() { changeImpl(); }
 
-protected:
+  protected:
     OnChangeListener onChange;
 
     template <typename T>
-    static void changeAttributes(MutableState<typename T::Params>& dest, const typename T::Params &src, const OnChangeListener &listener, MutableShape *target) {
+    static void changeAttributes(MutableState<typename T::Params> &dest, const typename T::Params &src,
+                                 const OnChangeListener &listener, MutableShape *target) {
         dest.setPendingState(src);
         if (listener) {
             listener(target);
         }
     }
 
-private:
+  private:
     virtual void changeImpl() = 0;
 };
 
 class Rectangle : public MutableShape {
-public:
+  public:
     struct Params {
         Point start{};
         Length width{0};
@@ -54,14 +51,14 @@ public:
     void setAttributes(Params params) noexcept;
     void draw(painting::Tool *tool) override;
 
-private:
+  private:
     void changeImpl() override;
 
     MutableState<Params> attributes;
 };
 
 class Circle : public MutableShape {
-public:
+  public:
     struct Params {
         Point center{};
         Length radius{0};
@@ -73,14 +70,14 @@ public:
     void setAttributes(Params params) noexcept;
     void draw(painting::Tool *tool) override;
 
-private:
+  private:
     void changeImpl() override;
 
     MutableState<Params> attributes;
 };
 
 class Triangle : public MutableShape {
-public:
+  public:
     struct Params {
         Point v1{};
         Point v2{};
@@ -93,7 +90,7 @@ public:
     void setAttributes(Params params) noexcept;
     void draw(painting::Tool *tool) override;
 
-private:
+  private:
     void changeImpl() override;
     void drawLine(Point a, Point b, painting::Tool *tool);
 

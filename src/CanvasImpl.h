@@ -8,15 +8,16 @@
 namespace canvas {
 
 class CanvasImpl : public Canvas {
-    using Objects = std::list<shapes::Shape*>;
-public:
+    using Objects = std::list<shapes::Shape *>;
+
+  public:
     explicit CanvasImpl(CanvasResolution resolution);
     ~CanvasImpl() noexcept override;
 
     void draw(shapes::Shape *shape) override;
     void erase(shapes::Shape *shape) override;
 
-private:
+  private:
     void drawImpl(shapes::Shape *shape);
     void eraseImpl(shapes::Shape *shape);
     [[nodiscard]] unsigned int pointToPosition(Point point) const noexcept;
@@ -32,33 +33,33 @@ private:
 };
 
 class Brush : public painting::Tool {
-public:
-    explicit Brush(CanvasImpl& canvas);
+  public:
+    explicit Brush(CanvasImpl &canvas);
 
     void apply(Point point, Color color) override;
 
-private:
-    CanvasImpl& canvas;
+  private:
+    CanvasImpl &canvas;
 };
 
 class Eraser : public painting::Tool {
-public:
-    explicit Eraser(CanvasImpl& canvas);
+  public:
+    explicit Eraser(CanvasImpl &canvas);
 
     void apply(Point point, Color color) override;
 
-private:
-    CanvasImpl& canvas;
+  private:
+    CanvasImpl &canvas;
 };
 
 class Sketcher : public painting::Tool {
-public:
-    explicit Sketcher(CanvasImpl& canvas);
+  public:
+    explicit Sketcher(CanvasImpl &canvas);
 
     void apply(Point point, Color color) override;
 
-private:
-    CanvasImpl& canvas;
+  private:
+    CanvasImpl &canvas;
 };
 
 } // namespace canvas

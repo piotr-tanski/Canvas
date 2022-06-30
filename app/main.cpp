@@ -6,7 +6,7 @@
 
 constexpr auto resolution = canvas::CanvasResolution{20, 20};
 
-void displayCanvas(const canvas::Canvas::DrawingArea& canvas, std::string &&title) {
+void displayCanvas(const canvas::Canvas::DrawingArea &canvas, std::string &&title) {
     std::cout << '\n' << title << '\n';
     for (auto r = 0; r < resolution.height; ++r) {
         for (auto c = 0; c < resolution.width; ++c) {
@@ -37,8 +37,7 @@ void testRectangles() {
     overlappingObjCmd.add(overlapping);
     try {
         controller->execute(std::move(overlappingObjCmd));
-    }
-    catch (const canvas::ObjectsOverlappingError &error) {
+    } catch (const canvas::ObjectsOverlappingError &error) {
         std::cout << "Error occurred: " << error.what() << '\n';
         delete overlapping;
     }
@@ -94,9 +93,7 @@ void testTriangles() {
     auto obj = new Triangle(params);
 
     canvas::Batch displayCmd;
-    displayCmd
-            .add(obj)
-            .select(obj);
+    displayCmd.add(obj).select(obj);
     controller->execute(std::move(displayCmd));
     displayCanvas(controller->getCanvasData(), "Display a triangle");
 
@@ -113,9 +110,7 @@ void testCircles() {
     auto obj = new Circle(params);
 
     canvas::Batch displayCmd;
-    displayCmd
-            .add(obj)
-            .select(obj);
+    displayCmd.add(obj).select(obj);
     controller->execute(std::move(displayCmd));
     displayCanvas(controller->getCanvasData(), "Display a circle");
 
@@ -124,7 +119,7 @@ void testCircles() {
     displayCanvas(controller->getCanvasData(), "Display smaller circle");
 }
 
-int main(int, char**) {
+int main(int, char **) {
     testRectangles();
     testTriangles();
     testCircles();
