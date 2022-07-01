@@ -35,10 +35,10 @@ void Circle::setAttributes(Params params) noexcept { changeAttributes<Circle>(at
 void Circle::changeImpl() { attributes.performTransition(); }
 
 void Circle::draw(painting::Tool *tool) {
-    const auto start = toRadians(0);
-    const auto end = toRadians(360);
+    constexpr auto start = toRadians(0);
+    constexpr auto end = toRadians(360);
+    constexpr double step = 0.01;
     const auto radius = attributes.get().radius;
-    double step = 0.001;
 
     unsigned int x, y;
     for (double radians = start; radians <= end; radians += step) {

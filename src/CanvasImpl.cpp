@@ -36,8 +36,8 @@ void CanvasImpl::erase(shapes::Shape *shape) {
 }
 
 void CanvasImpl::eraseImpl(shapes::Shape *shape) {
-    auto rubber = std::make_unique<Eraser>(*this);
-    shape->draw(rubber.get());
+    auto eraser = std::make_unique<Eraser>(*this);
+    shape->draw(eraser.get());
 }
 
 void CanvasImpl::checkIfAreaIsEmpty(shapes::Shape *shape) {
