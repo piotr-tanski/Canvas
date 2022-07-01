@@ -1,0 +1,30 @@
+@startuml
+
+actor GUI as gui
+
+gui -> Controller : select shape
+gui <-- Controller
+
+gui -> Shape : change attributes
+activate Shape
+Shape -> Controller : notify change
+
+activate Controller
+Controller -> Canvas : draw
+
+activate Canvas
+note right
+    See:
+    dynamic_view_add_remove_change.puml
+end note
+Controller <-- Canvas
+deactivate Canvas
+
+Shape <-- Controller
+deactivate Controller
+
+gui <-- Shape
+deactivate Shape
+
+
+@enduml

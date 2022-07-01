@@ -1,0 +1,31 @@
+@startuml
+
+actor GUI as gui
+
+create Shape
+gui -> Shape : create
+
+gui -> Controller : add / remove / change shape
+activate Controller
+
+Controller -> Canvas : draw / erase shape
+activate Canvas
+
+create Tool
+Canvas -> Tool : create
+
+Canvas -> Tool : draw
+
+activate Tool
+Canvas <- Tool : apply
+Canvas --> Tool
+Canvas <-- Tool
+deactivate Tool
+
+Controller <-- Canvas
+deactivate Canvas
+
+gui <-- Controller
+deactivate Controller
+
+@enduml
